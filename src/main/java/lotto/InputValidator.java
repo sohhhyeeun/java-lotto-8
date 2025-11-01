@@ -5,14 +5,14 @@ import java.util.List;
 
 public class InputValidator {
     public int validatePurchaseAmount(String amountString) {
-        int amount = parseNumeric(amountString);
+        int amount = parseAmount(amountString);
         validatePositive(amount);
         validateDivisible(amount);
 
         return amount;
     }
 
-    private int parseNumeric(String amountString) {
+    private int parseAmount(String amountString) {
         try {
             return Integer.parseInt(amountString);
         } catch (NumberFormatException e) {
@@ -36,9 +36,7 @@ public class InputValidator {
 
     public List<Integer> validateWinningNumbers(String winningNumbersString) {
         List<String> numbersString = splitByComma(winningNumbersString);
-
-        List<Integer> numbers = parseNumericList(numbersString);
-
+        List<Integer> numbers = parseNumberList(numbersString);
         Lotto winningLotto = new Lotto(numbers);
 
         return winningLotto.getNumbers();
@@ -65,7 +63,7 @@ public class InputValidator {
         return result;
     }
 
-    private List<Integer> parseNumericList(List<String> numbersString) {
+    private List<Integer> parseNumberList(List<String> numbersString) {
         List<Integer> numbers = new ArrayList<>();
 
         try {
@@ -77,5 +75,33 @@ public class InputValidator {
         }
 
         return numbers;
+    }
+
+    public int validateBonusNumber(String bonusNumberString, List<Integer> winningNumbers) {
+        int bonusNumber = parseBonusNumber(bonusNumberString);
+        validateBonusRange(bonusNumber);
+        validateDuplicateWithWinningNumbers(bonusNumber, winningNumbers);
+
+        return bonusNumber;
+    }
+
+    private int parseBonusNumber(String bonusNumberString) {
+        try {
+            return Integer.parseInt(bonusNumberString.trim());
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("[ERROR] 보너스 번호는 숫자여야 합니다.");
+        }
+    }
+
+    private void validateBonusRange(int bonusNumber) {
+        if (bonusNumber < 1 || bonusNumber > 45) {
+            throw new IllegalArgumentException("[ERROR] 보너스 번호는 1부터 45 사이의 숫자여야 합니다.");
+        }
+    }
+
+    private void validateDuplicateWithWinningNumbers(int bonusNumber, List<Integer> winningNumbers) {
+        if (winningNumbers.contains(bonusNumber)) {
+            throw new IllegalArgumentException("[ERROR] 보너스 번호는 당첨 번호와 중복되지 않아야 합니다.");
+        }
     }
 }
