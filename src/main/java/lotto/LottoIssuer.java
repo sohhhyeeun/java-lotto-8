@@ -10,8 +10,8 @@ public class LottoIssuer {
         this.lottoNumberDrawer = new LottoNumberDrawer();
     }
 
-    public List<Lotto> issueLottos(int amount) {
-        int quantity = calculateQuantity(amount);
+    public List<Lotto> issueLottos(int purchaseAmount) {
+        int quantity = calculateQuantity(purchaseAmount);
         List<Lotto> lottos = new ArrayList<>();
 
         for (int i = 0; i < quantity; i++) {
@@ -21,8 +21,8 @@ public class LottoIssuer {
         return lottos;
     }
 
-    private int calculateQuantity(int amount) {
-        return amount / 1000;
+    private int calculateQuantity(int purchaseAmount) {
+        return purchaseAmount / 1000;
     }
 
     private Lotto issueNewLotto() {
